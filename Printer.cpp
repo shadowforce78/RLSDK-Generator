@@ -88,10 +88,59 @@ namespace Printer
                 {
                     stream << "#include \"../SdkConstants.hpp\"\n";
                 }
+
+                stream << "#include \"../GameDefines.hpp\"\n";
+
+                // Logic for _structs.hpp files
+                if (fileName.find("_structs") != std::string::npos)
+                {
+                   // Core_structs.hpp is the root
+                   // Other _structs.hpp need Core_structs.hpp for basic types
+                   if (fileName != "Core_structs")
+                   {
+                       stream << "#include \"Core_structs.hpp\"\n";
+                   }
+                }
+                // Logic for _classes.hpp files
+                else if (fileName.find("_classes") != std::string::npos)
+                {
+                     // Include the corresponding parameters/structs file first
+                     std::string structsFileName = fileName;
+                     size_t pos = structsFileName.find("_classes");
+                     if (pos != std::string::npos) {
+                         structsFileName.replace(pos, 8, "_structs");
+                     }
+                     stream << "#include \"" << structsFileName << ".hpp\"\n";
+
+                     if (fileName == "Core_classes")
+                     {
+                         // Core root - nothing else needed
+                     }
+                     else if (fileName == "Engine_classes")
+                     {
+                         stream << "#include \"Core_classes.hpp\"\n";
+                     }
+                     else 
+                     {
+                         stream << "#include \"Core_classes.hpp\"\n";
+                         stream << "#include \"Engine_classes.hpp\"\n";
+                     }
+                }
             }
             else if (fileExtension == "cpp")
             {
                 stream << "#include \"../SdkHeaders.hpp\"\n";
+                stream << "#include \"../GameDefines.hpp\"\n";
+
+                if (fileName != "Core_classes")
+                {
+                    stream << "#include \"Core_classes.hpp\"\n";
+                }
+
+                if (fileName != "Engine_classes")
+                {
+                    stream << "#include \"Engine_classes.hpp\"\n";
+                }
             }
         }
 

@@ -1,0 +1,1 @@
+msbuild CodeRedGenerator.sln /p:Configuration=Release

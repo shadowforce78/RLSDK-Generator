@@ -2,7 +2,7 @@
 #include <algorithm>
 #include <stdlib.h>
 #include <locale.h>
-#include <xlocale>
+#include <locale>
 #include <ctype.h>
 #include <chrono>
 #include <thread>

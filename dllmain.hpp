@@ -29,6 +29,12 @@ namespace Retrievers
 	uintptr_t GetEntryPoint();
 	uintptr_t GetOffset(void* pointer);
 	uintptr_t FindPattern(HMODULE hModule, const uint8_t* pattern, const char* mask);
+
+#ifndef _WIN32
+	// Linux-specific helpers
+	HMODULE GetModuleHandle(const char* name);
+	uintptr_t GetModuleSize(HMODULE hModule);
+#endif
 }
 
 namespace ConstGenerator

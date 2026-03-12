@@ -1,10 +1,29 @@
 #include "dllmain.hpp"
+#include <cstring>
+
+#ifndef _WIN32
+#include <fstream>
+#include <sstream>
+#include <dlfcn.h>
+#include <link.h>
+#include <thread>
+#endif
 
 namespace Utils
 {
     void Messagebox(const std::string& message, uint32_t flags)
     {
+#ifdef _WIN32
         MessageBoxA(NULL, message.c_str(), Engine::GeneratorName.c_str(), flags);
+#else
+        // On Linux, print to stdout/stderr instead of a message box
+        if (flags & MB_ICONERROR)
+            std::cerr << "[ERROR] " << Engine::GeneratorName << ": " << message << std::endl;
+        else if (flags & MB_ICONWARNING)
+            std::cerr << "[WARNING] " << Engine::GeneratorName << ": " << message << std::endl;
+        else
+            std::cout << "[INFO] " << Engine::GeneratorName << ": " << message << std::endl;
+#endif
     }
 
     bool MapExists(std::multimap<std::string, std::string>& map, const std::string& key, const std::string& value)
@@ -504,7 +523,11 @@ namespace Retrievers
 
     uintptr_t GetEntryPoint()
     {
+#ifdef _WIN32
         return reinterpret_cast<uintptr_t>(GetModuleHandle(NULL));
+#else
+        return reinterpret_cast<uintptr_t>(Retrievers::GetModuleHandle(nullptr));
+#endif
     }
 
     uintptr_t GetOffset(void* pointer)
@@ -517,17 +540,70 @@ namespace Retrievers
             return (address - entryPoint);
         }
         
-        return NULL;
+        return 0;
     }
+
+#ifndef _WIN32
+    // Linux: get the base address of the main executable or a loaded shared object
+    HMODULE GetModuleHandle(const char* name)
+    {
+        if (!name)
+        {
+            // Return base address of main executable
+            // Read from /proc/self/maps
+            std::ifstream maps("/proc/self/maps");
+            std::string line;
+            if (std::getline(maps, line))
+            {
+                uintptr_t base = std::stoull(line, nullptr, 16);
+                return reinterpret_cast<HMODULE>(base);
+            }
+            return nullptr;
+        }
+        return dlopen(name, RTLD_NOLOAD);
+    }
+
+    // Linux: get the size of a loaded module from /proc/self/maps
+    uintptr_t GetModuleSize(HMODULE hModule)
+    {
+        uintptr_t base = reinterpret_cast<uintptr_t>(hModule);
+        uintptr_t end = base;
+
+        std::ifstream maps("/proc/self/maps");
+        std::string line;
+        while (std::getline(maps, line))
+        {
+            uintptr_t start_addr, end_addr;
+            if (sscanf(line.c_str(), "%lx-%lx", &start_addr, &end_addr) == 2)
+            {
+                if (start_addr >= base && end_addr > end)
+                {
+                    end = end_addr;
+                }
+                // Stop if we've gone past our module's mappings
+                if (start_addr > end && end > base)
+                    break;
+            }
+        }
+        return (end - base);
+    }
+#endif
 
     uintptr_t FindPattern(HMODULE hModule, const uint8_t* pattern, const char* mask)
     {
+        uintptr_t start = 0;
+        uintptr_t end = 0;
+
+#ifdef _WIN32
         MODULEINFO miInfos;
         ZeroMemory(&miInfos, sizeof(MODULEINFO));
         K32GetModuleInformation(GetCurrentProcess(), hModule, &miInfos, sizeof(MODULEINFO));
-
-        uintptr_t start = reinterpret_cast<uintptr_t>(hModule);
-        uintptr_t end = (start + miInfos.SizeOfImage);
+        start = reinterpret_cast<uintptr_t>(hModule);
+        end = (start + miInfos.SizeOfImage);
+#else
+        start = reinterpret_cast<uintptr_t>(hModule);
+        end = start + Retrievers::GetModuleSize(hModule);
+#endif
 
         size_t currentPos = 0;
         size_t maskLength = (std::strlen(mask) - 1);
@@ -550,7 +626,7 @@ namespace Retrievers
             }
         }
 
-        return NULL;
+        return 0;
     }
 }
 
@@ -1935,7 +2011,11 @@ namespace FunctionGenerator
         
         if (!Configuration::UsingOffsets)
         {
+#ifdef _WIN32
             processEventAddress = Retrievers::FindPattern(GetModuleHandle(NULL), Configuration::ProcessEventPattern, Configuration::ProcessEventMask);
+#else
+            processEventAddress = Retrievers::FindPattern(Retrievers::GetModuleHandle(nullptr), Configuration::ProcessEventPattern, Configuration::ProcessEventMask);
+#endif
         }
         else if (Configuration::ProcessEventIndex != -1)
         {
@@ -2786,8 +2866,13 @@ namespace Generator
             }
             else
             {
+#ifdef _WIN32
                 uintptr_t GObjectsAddress = Retrievers::FindPattern(GetModuleHandle(NULL), Configuration::GObjectsPattern, Configuration::GObjectsMask);
                 uintptr_t GNamesAddress = Retrievers::FindPattern(GetModuleHandle(NULL), Configuration::GNamesPattern, Configuration::GNamesMask);
+#else
+                uintptr_t GObjectsAddress = Retrievers::FindPattern(Retrievers::GetModuleHandle(nullptr), Configuration::GObjectsPattern, Configuration::GObjectsMask);
+                uintptr_t GNamesAddress = Retrievers::FindPattern(Retrievers::GetModuleHandle(nullptr), Configuration::GNamesPattern, Configuration::GNamesMask);
+#endif
                 GObjects = reinterpret_cast<TArray<UObject*>*>(GObjectsAddress);
                 GNames = reinterpret_cast<TArray<FNameEntry*>*>(GNamesAddress);
             }
@@ -2994,6 +3079,7 @@ namespace Generator
     }
 }
 
+#ifdef _WIN32
 void OnAttach(HMODULE hModule)
 {
     DisableThreadLibraryCalls(hModule);
@@ -3015,3 +3101,22 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
     }
     return TRUE;
 }
+#else
+// Linux: constructor attribute runs when the shared library is loaded
+__attribute__((constructor))
+static void OnLoad()
+{
+    std::thread([]() {
+        Generator::GenerateSDK();
+        Generator::DumpInstances(true, true);
+    }).detach();
+}
+
+// Linux: can also be used as a standalone executable
+int main(int argc, char* argv[])
+{
+    Generator::GenerateSDK();
+    Generator::DumpInstances(true, true);
+    return 0;
+}
+#endif

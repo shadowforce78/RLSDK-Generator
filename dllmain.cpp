@@ -1735,6 +1735,15 @@ namespace ClassGenerator
         std::string classNameCPP = Utils::CreateValidName(uClass->GetNameCPP());
         std::string classFullName = uClass->GetFullName();
 
+        // Hardcoded fix for cyclic dependency UGroup_ORS -> UScriptGroup_ORS -> ...
+        if (classNameCPP == "UGroup_ORS" && uSuperClass)
+        {
+            while (uSuperClass && Utils::CreateValidName(uSuperClass->GetNameCPP()) != "UObject")
+            {
+                uSuperClass = static_cast<UClass *>(uSuperClass->SuperField);
+            }
+        }
+
 #ifndef NO_LOGGING
         if (Generator::LogFile.is_open())
         {

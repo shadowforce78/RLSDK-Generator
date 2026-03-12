@@ -11,7 +11,7 @@
 
 namespace Utils
 {
-    void Messagebox(const std::string& message, uint32_t flags)
+    void Messagebox(const std::string &message, uint32_t flags)
     {
 #ifdef _WIN32
         MessageBoxA(NULL, message.c_str(), Engine::GeneratorName.c_str(), flags);
@@ -26,7 +26,7 @@ namespace Utils
 #endif
     }
 
-    bool MapExists(std::multimap<std::string, std::string>& map, const std::string& key, const std::string& value)
+    bool MapExists(std::multimap<std::string, std::string> &map, const std::string &key, const std::string &value)
     {
         std::pair<std::multimap<std::string, std::string>::iterator, std::multimap<std::string, std::string>::iterator> prRange;
         prRange = map.equal_range(key);
@@ -42,31 +42,24 @@ namespace Utils
         return false;
     }
 
-    bool SortPropertyPair(const std::pair<class UProperty*, std::string>& pairA, const std::pair<class UProperty*, std::string>& pairB)
+    bool SortPropertyPair(const std::pair<class UProperty *, std::string> &pairA, const std::pair<class UProperty *, std::string> &pairB)
     {
         return SortProperty(pairA.first, pairB.first);
     }
 
-    bool SortProperty(class UProperty* propertyA, class UProperty* propertyB)
+    bool SortProperty(class UProperty *propertyA, class UProperty *propertyB)
     {
         if ((propertyA->Offset == propertyB->Offset) && propertyA->IsA<UBoolProperty>() && propertyB->IsA<UBoolProperty>())
         {
-            return (static_cast<UBoolProperty*>(propertyA)->BitMask < static_cast<UBoolProperty*>(propertyB)->BitMask);
+            return (static_cast<UBoolProperty *>(propertyA)->BitMask < static_cast<UBoolProperty *>(propertyB)->BitMask);
         }
-       
+
         return (propertyA->Offset < propertyB->Offset);
     }
 
     bool IsStructProperty(EPropertyTypes propertyType)
     {
-        if (propertyType == EPropertyTypes::TYPE_TARRAY
-            || propertyType == EPropertyTypes::TYPE_TMAP
-            || propertyType == EPropertyTypes::TYPE_FNAMEENTRY
-            || propertyType == EPropertyTypes::TYPE_FNAME
-            || propertyType == EPropertyTypes::TYPE_FSTRING
-            || propertyType == EPropertyTypes::TYPE_FSCRIPTDELEGATE
-            || propertyType == EPropertyTypes::TYPE_FPOINTER
-            || propertyType == EPropertyTypes::TYPE_FSTRUCT)
+        if (propertyType == EPropertyTypes::TYPE_TARRAY || propertyType == EPropertyTypes::TYPE_TMAP || propertyType == EPropertyTypes::TYPE_FNAMEENTRY || propertyType == EPropertyTypes::TYPE_FNAME || propertyType == EPropertyTypes::TYPE_FSTRING || propertyType == EPropertyTypes::TYPE_FSCRIPTDELEGATE || propertyType == EPropertyTypes::TYPE_FPOINTER || propertyType == EPropertyTypes::TYPE_FSTRUCT)
         {
             return true;
         }
@@ -76,9 +69,7 @@ namespace Utils
 
     bool IsBitField(EPropertyTypes propertyType)
     {
-        if (propertyType == EPropertyTypes::TYPE_INT8
-            || propertyType == EPropertyTypes::TYPE_ULONG
-            || propertyType == EPropertyTypes::TYPE_UINT64)
+        if (propertyType == EPropertyTypes::TYPE_INT8 || propertyType == EPropertyTypes::TYPE_ULONG || propertyType == EPropertyTypes::TYPE_UINT64)
         {
             return true;
         }
@@ -88,9 +79,7 @@ namespace Utils
 
     bool IsBitField(uint32_t arrayDim)
     {
-        if (arrayDim == 1
-            || arrayDim == 2
-            || arrayDim == 3)
+        if (arrayDim == 1 || arrayDim == 2 || arrayDim == 3)
         {
             return true;
         }
@@ -100,35 +89,9 @@ namespace Utils
 
     std::string CreateValidName(std::string name)
     {
-        for (char& c : name)
+        for (char &c : name)
         {
-            if ((c == '`')
-                || (c == '!')
-                || (c == '@')
-                || (c == '#')
-                || (c == '$')
-                || (c == '%')
-                || (c == '^')
-                || (c == '&')
-                || (c == '*')
-                || (c == '(')
-                || (c == ')')
-                || (c == '-')
-                || (c == '=')
-                || (c == '+')
-                || (c == '[')
-                || (c == '{')
-                || (c == ']')
-                || (c == '}')
-                || (c == '\\')
-                || (c == '|')
-                || (c == ';')
-                || (c == ':')
-                || (c == '\'')
-                || (c == '"')
-                || (c == ',')
-                || (c == '/')
-                || (c == '?'))
+            if ((c == '`') || (c == '!') || (c == '@') || (c == '#') || (c == '$') || (c == '%') || (c == '^') || (c == '&') || (c == '*') || (c == '(') || (c == ')') || (c == '-') || (c == '=') || (c == '+') || (c == '[') || (c == '{') || (c == ']') || (c == '}') || (c == '\\') || (c == '|') || (c == ';') || (c == ':') || (c == '\'') || (c == '"') || (c == ',') || (c == '/') || (c == '?'))
             {
                 c = '_';
             }
@@ -137,9 +100,9 @@ namespace Utils
         return name;
     }
 
-    std::string CreateUniqueName(class UClass* uClass)
+    std::string CreateUniqueName(class UClass *uClass)
     {
-        UClass* superClass = static_cast<UClass*>(uClass->SuperField);
+        UClass *superClass = static_cast<UClass *>(uClass->SuperField);
         std::string classNameCPP = CreateValidName(uClass->GetNameCPP());
         std::transform(classNameCPP.begin(), classNameCPP.end(), classNameCPP.begin(), toupper);
 
@@ -155,7 +118,7 @@ namespace Utils
         return uniqueName;
     }
 
-    std::string CreateUniqueName(class UFunction* function, class UClass* uClass)
+    std::string CreateUniqueName(class UFunction *function, class UClass *uClass)
     {
         std::string functionName = CreateValidName(function->GetName());
         std::string classNameCPP = CreateValidName(uClass->GetNameCPP());
@@ -166,7 +129,7 @@ namespace Utils
         return (classNameCPP + "_" + functionName);
     }
 
-    void CreateWinFunction(std::string& functionName)
+    void CreateWinFunction(std::string &functionName)
     {
         size_t gctW = functionName.find("GetCurrentTime");
         size_t goW = functionName.find("GetObject");
@@ -174,11 +137,7 @@ namespace Utils
         size_t dtW = functionName.find("DrawText");
         size_t smW = functionName.find("SendMessage");
 
-        if (gctW != std::string::npos
-            || goW != std::string::npos
-            || dfW != std::string::npos
-            || dtW != std::string::npos
-            || smW != std::string::npos)
+        if (gctW != std::string::npos || goW != std::string::npos || dfW != std::string::npos || dtW != std::string::npos || smW != std::string::npos)
         {
             functionName += "W";
         }
@@ -187,60 +146,260 @@ namespace Utils
 
 namespace Retrievers
 {
-    void GetAllPropertyFlags(std::ostringstream& stream, uint64_t propertyFlags)
+    void GetAllPropertyFlags(std::ostringstream &stream, uint64_t propertyFlags)
     {
         bool first = true;
 
-        if (propertyFlags & EPropertyFlags::CPF_Edit) { stream << (first ? "(" : " | ") << "CPF_Edit";							                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_Const) { stream << (first ? "(" : " | ") << "CPF_Const";						                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_Input) { stream << (first ? "(" : " | ") << "CPF_Input";						                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_ExportObject) { stream << (first ? "(" : " | ") << "CPF_ExportObject";			                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_OptionalParm) { stream << (first ? "(" : " | ") << "CPF_OptionalParm";			                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_Net) { stream << (first ? "(" : " | ") << "CPF_Net";							                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_EditConstArray) { stream << (first ? "(" : " | ") << "CPF_EditConstArray";		                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_Parm) { stream << (first ? "(" : " | ") << "CPF_Parm";							                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_OutParm) { stream << (first ? "(" : " | ") << "CPF_OutParm";					                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_SkipParm) { stream << (first ? "(" : " | ") << "CPF_SkipParm";					                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_ReturnParm) { stream << (first ? "(" : " | ") << "CPF_ReturnParm";				                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_CoerceParm) { stream << (first ? "(" : " | ") << "CPF_CoerceParm";				                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_Native) { stream << (first ? "(" : " | ") << "CPF_Native";						                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_Transient) { stream << (first ? "(" : " | ") << "CPF_Transient";				                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_Config) { stream << (first ? "(" : " | ") << "CPF_Config";						                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_Localized) { stream << (first ? "(" : " | ") << "CPF_Localized";				                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_Travel) { stream << (first ? "(" : " | ") << "CPF_Travel";						                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_EditConst) { stream << (first ? "(" : " | ") << "CPF_EditConst";				                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_GlobalConfig) { stream << (first ? "(" : " | ") << "CPF_GlobalConfig";			                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_Component) { stream << (first ? "(" : " | ") << "CPF_Component";				                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_NeedCtorLink) { stream << (first ? "(" : " | ") << "CPF_NeedCtorLink";			                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_NoExport) { stream << (first ? "(" : " | ") << "CPF_NoExport";					                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_NoClear) { stream << (first ? "(" : " | ") << "CPF_NoClear";					                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_EditInline) { stream << (first ? "(" : " | ") << "CPF_EditInline";				                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_EdFindable) { stream << (first ? "(" : " | ") << "CPF_EdFindable";				                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_EditInlineUse) { stream << (first ? "(" : " | ") << "CPF_EditInlineUse";		                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_Deprecated) { stream << (first ? " " : " | ") << "CPF_Deprecated";				                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_EditInlineNotify) { stream << (first ? "(" : " | ") << "CPF_EditInlineNotify";	                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_RepNotify) { stream << (first ? "(" : " | ") << "CPF_RepNotify";				                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_Interp) { stream << (first ? "(" : " | ") << "CPF_Interp";						                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_NonTransactional) { stream << (first ? "(" : " | ") << "CPF_NonTransactional";	                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_EditorOnly) { stream << (first ? "(" : " | ") << "CPF_EditorOnly";	                                            first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_NoDestructor) { stream << (first ? "(" : " | ") << "CPF_NoDestructor";	                                        first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_AutoWeak) { stream << (first ? "(" : " | ") << "CPF_AutoWeak";	                                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_ContainsInstancedReference) { stream << (first ? "(" : " | ") << "CPF_ContainsInstancedReference";              first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_SimpleDisplay) { stream << (first ? "(" : " | ") << "CPF_SimpleDisplay";	                                    first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_AdvancedDisplay) { stream << (first ? "(" : " | ") << "CPF_AdvancedDisplay";	                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_Protected) { stream << (first ? "(" : " | ") << "CPF_Protected";	                                            first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_BlueprintCallable) { stream << (first ? "(" : " | ") << "CPF_BlueprintCallable";                                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_BlueprintAuthorityOnly) { stream << (first ? "(" : " | ") << "CPF_BlueprintAuthorityOnly";                      first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_TextExportTransient) { stream << (first ? "(" : " | ") << "CPF_TextExportTransient";                            first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_NonPIEDuplicateTransient) { stream << (first ? "(" : " | ") << "CPF_NonPIEDuplicateTransient";	                first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_ExposeOnSpawn) { stream << (first ? "(" : " | ") << "CPF_ExposeOnSpawn";                                        first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_PersistentInstance) { stream << (first ? "(" : " | ") << "CPF_PersistentInstance";                              first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_UObjectWrapper) { stream << (first ? "(" : " | ") << "CPF_UObjectWrapper";	                                    first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_HasGetValueTypeHash) { stream << (first ? "(" : " | ") << "CPF_HasGetValueTypeHash";                            first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_NativeAccessSpecifierPublic) { stream << (first ? "(" : " | ") << "CPF_NativeAccessSpecifierPublic";            first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_NativeAccessSpecifierProtected) { stream << (first ? "(" : " | ") << "CPF_NativeAccessSpecifierProtected";      first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_NativeAccessSpecifierPrivate) { stream << (first ? "(" : " | ") << "CPF_NativeAccessSpecifierPrivate";          first = false; }
-        if (propertyFlags & EPropertyFlags::CPF_SkipSerialization) { stream << (first ? "(" : " | ") << "CPF_SkipSerialization";                                first = false; }
+        if (propertyFlags & EPropertyFlags::CPF_Edit)
+        {
+            stream << (first ? "(" : " | ") << "CPF_Edit";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_Const)
+        {
+            stream << (first ? "(" : " | ") << "CPF_Const";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_Input)
+        {
+            stream << (first ? "(" : " | ") << "CPF_Input";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_ExportObject)
+        {
+            stream << (first ? "(" : " | ") << "CPF_ExportObject";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_OptionalParm)
+        {
+            stream << (first ? "(" : " | ") << "CPF_OptionalParm";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_Net)
+        {
+            stream << (first ? "(" : " | ") << "CPF_Net";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_EditConstArray)
+        {
+            stream << (first ? "(" : " | ") << "CPF_EditConstArray";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_Parm)
+        {
+            stream << (first ? "(" : " | ") << "CPF_Parm";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_OutParm)
+        {
+            stream << (first ? "(" : " | ") << "CPF_OutParm";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_SkipParm)
+        {
+            stream << (first ? "(" : " | ") << "CPF_SkipParm";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_ReturnParm)
+        {
+            stream << (first ? "(" : " | ") << "CPF_ReturnParm";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_CoerceParm)
+        {
+            stream << (first ? "(" : " | ") << "CPF_CoerceParm";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_Native)
+        {
+            stream << (first ? "(" : " | ") << "CPF_Native";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_Transient)
+        {
+            stream << (first ? "(" : " | ") << "CPF_Transient";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_Config)
+        {
+            stream << (first ? "(" : " | ") << "CPF_Config";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_Localized)
+        {
+            stream << (first ? "(" : " | ") << "CPF_Localized";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_Travel)
+        {
+            stream << (first ? "(" : " | ") << "CPF_Travel";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_EditConst)
+        {
+            stream << (first ? "(" : " | ") << "CPF_EditConst";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_GlobalConfig)
+        {
+            stream << (first ? "(" : " | ") << "CPF_GlobalConfig";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_Component)
+        {
+            stream << (first ? "(" : " | ") << "CPF_Component";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_NeedCtorLink)
+        {
+            stream << (first ? "(" : " | ") << "CPF_NeedCtorLink";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_NoExport)
+        {
+            stream << (first ? "(" : " | ") << "CPF_NoExport";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_NoClear)
+        {
+            stream << (first ? "(" : " | ") << "CPF_NoClear";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_EditInline)
+        {
+            stream << (first ? "(" : " | ") << "CPF_EditInline";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_EdFindable)
+        {
+            stream << (first ? "(" : " | ") << "CPF_EdFindable";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_EditInlineUse)
+        {
+            stream << (first ? "(" : " | ") << "CPF_EditInlineUse";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_Deprecated)
+        {
+            stream << (first ? " " : " | ") << "CPF_Deprecated";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_EditInlineNotify)
+        {
+            stream << (first ? "(" : " | ") << "CPF_EditInlineNotify";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_RepNotify)
+        {
+            stream << (first ? "(" : " | ") << "CPF_RepNotify";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_Interp)
+        {
+            stream << (first ? "(" : " | ") << "CPF_Interp";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_NonTransactional)
+        {
+            stream << (first ? "(" : " | ") << "CPF_NonTransactional";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_EditorOnly)
+        {
+            stream << (first ? "(" : " | ") << "CPF_EditorOnly";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_NoDestructor)
+        {
+            stream << (first ? "(" : " | ") << "CPF_NoDestructor";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_AutoWeak)
+        {
+            stream << (first ? "(" : " | ") << "CPF_AutoWeak";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_ContainsInstancedReference)
+        {
+            stream << (first ? "(" : " | ") << "CPF_ContainsInstancedReference";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_SimpleDisplay)
+        {
+            stream << (first ? "(" : " | ") << "CPF_SimpleDisplay";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_AdvancedDisplay)
+        {
+            stream << (first ? "(" : " | ") << "CPF_AdvancedDisplay";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_Protected)
+        {
+            stream << (first ? "(" : " | ") << "CPF_Protected";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_BlueprintCallable)
+        {
+            stream << (first ? "(" : " | ") << "CPF_BlueprintCallable";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_BlueprintAuthorityOnly)
+        {
+            stream << (first ? "(" : " | ") << "CPF_BlueprintAuthorityOnly";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_TextExportTransient)
+        {
+            stream << (first ? "(" : " | ") << "CPF_TextExportTransient";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_NonPIEDuplicateTransient)
+        {
+            stream << (first ? "(" : " | ") << "CPF_NonPIEDuplicateTransient";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_ExposeOnSpawn)
+        {
+            stream << (first ? "(" : " | ") << "CPF_ExposeOnSpawn";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_PersistentInstance)
+        {
+            stream << (first ? "(" : " | ") << "CPF_PersistentInstance";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_UObjectWrapper)
+        {
+            stream << (first ? "(" : " | ") << "CPF_UObjectWrapper";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_HasGetValueTypeHash)
+        {
+            stream << (first ? "(" : " | ") << "CPF_HasGetValueTypeHash";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_NativeAccessSpecifierPublic)
+        {
+            stream << (first ? "(" : " | ") << "CPF_NativeAccessSpecifierPublic";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_NativeAccessSpecifierProtected)
+        {
+            stream << (first ? "(" : " | ") << "CPF_NativeAccessSpecifierProtected";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_NativeAccessSpecifierPrivate)
+        {
+            stream << (first ? "(" : " | ") << "CPF_NativeAccessSpecifierPrivate";
+            first = false;
+        }
+        if (propertyFlags & EPropertyFlags::CPF_SkipSerialization)
+        {
+            stream << (first ? "(" : " | ") << "CPF_SkipSerialization";
+            first = false;
+        }
 
         if (!first)
         {
@@ -248,45 +407,185 @@ namespace Retrievers
         }
     }
 
-    void GetAllFunctionFlags(std::ostringstream& stream, uint64_t functionFlags)
+    void GetAllFunctionFlags(std::ostringstream &stream, uint64_t functionFlags)
     {
         bool first = true;
 
-        if (functionFlags & EFunctionFlags::FUNC_None) { stream << (first ? "(" : " | ") << "FUNC_None";						                first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_Final) { stream << (first ? "(" : " | ") << "FUNC_Final";						                first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_Defined) { stream << (first ? "(" : " | ") << "FUNC_Defined";						            first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_Iterator) { stream << (first ? "(" : " | ") << "FUNC_Iterator";						        first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_Latent) { stream << (first ? "(" : " | ") << "FUNC_Latent";						            first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_PreOperator) { stream << (first ? "(" : " | ") << "FUNC_PreOperator";						    first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_Singular) { stream << (first ? "(" : " | ") << "FUNC_Singular";						        first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_Net) { stream << (first ? "(" : " | ") << "FUNC_Net";						                    first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_NetReliable) { stream << (first ? "(" : " | ") << "FUNC_NetReliable";						    first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_Simulated) { stream << (first ? "(" : " | ") << "FUNC_Simulated";						        first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_Exec) { stream << (first ? "(" : " | ") << "FUNC_Exec";						                first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_Native) { stream << (first ? "(" : " | ") << "FUNC_Native";						            first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_Event) { stream << (first ? "(" : " | ") << "FUNC_Event";						                first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_Operator) { stream << (first ? "(" : " | ") << "FUNC_Operator";						        first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_Static) { stream << (first ? "(" : " | ") << "FUNC_Static";						            first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_NoExport) { stream << (first ? "(" : " | ") << "FUNC_NoExport";						        first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_OptionalParm) { stream << (first ? "(" : " | ") << "FUNC_OptionalParm";						first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_Const) { stream << (first ? "(" : " | ") << "FUNC_Const";						                first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_Invariant) { stream << (first ? "(" : " | ") << "FUNC_Invariant";						        first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_Public) { stream << (first ? "(" : " | ") << "FUNC_Public";						            first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_Private) { stream << (first ? "(" : " | ") << "FUNC_Private";						            first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_Protected) { stream << (first ? "(" : " | ") << "FUNC_Protected";						        first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_Delegate) { stream << (first ? "(" : " | ") << "FUNC_Delegate";						        first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_NetServer) { stream << (first ? "(" : " | ") << "FUNC_NetServer";						        first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_HasOutParms) { stream << (first ? "(" : " | ") << "FUNC_HasOutParms";						    first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_HasDefaults) { stream << (first ? "(" : " | ") << "FUNC_HasDefaults";						    first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_NetClient) { stream << (first ? "(" : " | ") << "FUNC_NetClient";						        first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_DLLImport) { stream << (first ? "(" : " | ") << "FUNC_DLLImport";						        first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_K2Call) { stream << (first ? "(" : " | ") << "FUNC_K2Call";						            first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_K2Override) { stream << (first ? "(" : " | ") << "FUNC_K2Override";						    first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_K2Pure) { stream << (first ? "(" : " | ") << "FUNC_K2Pure";						            first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_EditorOnly) { stream << (first ? "(" : " | ") << "FUNC_EditorOnly";						    first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_Lambda) { stream << (first ? "(" : " | ") << "FUNC_Lambda";						            first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_NetValidate) { stream << (first ? "(" : " | ") << "FUNC_NetValidate";						    first = false; }
-        if (functionFlags & EFunctionFlags::FUNC_AllFlags) { stream << (first ? "(" : " | ") << "FUNC_AllFlags";						        first = false; }
+        if (functionFlags & EFunctionFlags::FUNC_None)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_None";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_Final)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_Final";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_Defined)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_Defined";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_Iterator)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_Iterator";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_Latent)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_Latent";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_PreOperator)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_PreOperator";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_Singular)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_Singular";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_Net)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_Net";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_NetReliable)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_NetReliable";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_Simulated)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_Simulated";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_Exec)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_Exec";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_Native)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_Native";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_Event)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_Event";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_Operator)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_Operator";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_Static)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_Static";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_NoExport)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_NoExport";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_OptionalParm)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_OptionalParm";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_Const)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_Const";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_Invariant)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_Invariant";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_Public)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_Public";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_Private)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_Private";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_Protected)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_Protected";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_Delegate)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_Delegate";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_NetServer)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_NetServer";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_HasOutParms)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_HasOutParms";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_HasDefaults)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_HasDefaults";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_NetClient)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_NetClient";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_DLLImport)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_DLLImport";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_K2Call)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_K2Call";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_K2Override)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_K2Override";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_K2Pure)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_K2Pure";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_EditorOnly)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_EditorOnly";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_Lambda)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_Lambda";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_NetValidate)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_NetValidate";
+            first = false;
+        }
+        if (functionFlags & EFunctionFlags::FUNC_AllFlags)
+        {
+            stream << (first ? "(" : " | ") << "FUNC_AllFlags";
+            first = false;
+        }
 
         if (!first)
         {
@@ -294,13 +593,13 @@ namespace Retrievers
         }
     }
 
-    EPropertyTypes GetPropertyTypeInternal(class UProperty* uProperty, std::string& outPropertyType, bool bIgnoreEnum, bool bIsBitField)
+    EPropertyTypes GetPropertyTypeInternal(class UProperty *uProperty, std::string &outPropertyType, bool bIgnoreEnum, bool bIsBitField)
     {
         if (uProperty)
         {
             if (uProperty->IsA<UStructProperty>())
             {
-                UStructProperty* structProperty = static_cast<UStructProperty*>(uProperty);
+                UStructProperty *structProperty = static_cast<UStructProperty *>(uProperty);
 
                 if (structProperty && structProperty->Struct)
                 {
@@ -336,8 +635,8 @@ namespace Retrievers
                 return EPropertyTypes::TYPE_UINT64;
             }
             else if (uProperty->IsA<UObjectProperty>())
-            { 
-                UObjectProperty* objectProperty = static_cast<UObjectProperty*>(uProperty);
+            {
+                UObjectProperty *objectProperty = static_cast<UObjectProperty *>(uProperty);
 
                 if (objectProperty && objectProperty->PropertyClass)
                 {
@@ -347,7 +646,7 @@ namespace Retrievers
             }
             else if (uProperty->IsA<UClassProperty>())
             {
-                UClassProperty* classProperty = static_cast<UClassProperty*>(uProperty);
+                UClassProperty *classProperty = static_cast<UClassProperty *>(uProperty);
 
                 if (classProperty && classProperty->MetaClass)
                 {
@@ -362,7 +661,7 @@ namespace Retrievers
             }
             else if (uProperty->IsA<UMapProperty>())
             {
-                UMapProperty* mapProperty = static_cast<UMapProperty*>(uProperty);
+                UMapProperty *mapProperty = static_cast<UMapProperty *>(uProperty);
                 std::string mapKey, mapValue;
 
                 if (mapProperty && mapProperty->Key && mapProperty->Value)
@@ -381,7 +680,7 @@ namespace Retrievers
             }
             else if (uProperty->IsA<UInterfaceProperty>())
             {
-                UInterfaceProperty* interfaceProperty = static_cast<UInterfaceProperty*>(uProperty);
+                UInterfaceProperty *interfaceProperty = static_cast<UInterfaceProperty *>(uProperty);
 
                 if (interfaceProperty && interfaceProperty->InterfaceClass)
                 {
@@ -392,7 +691,7 @@ namespace Retrievers
             else if (uProperty->IsA<UFloatProperty>())
             {
                 outPropertyType = "float";
-                return EPropertyTypes::TYPE_FLOAT;   
+                return EPropertyTypes::TYPE_FLOAT;
             }
             else if (uProperty->IsA<UDelegateProperty>())
             {
@@ -403,7 +702,7 @@ namespace Retrievers
             {
                 if (!bIgnoreEnum && Configuration::UsingEnumClasses)
                 {
-                    UByteProperty* byteProperty = static_cast<UByteProperty*>(uProperty);
+                    UByteProperty *byteProperty = static_cast<UByteProperty *>(uProperty);
 
                     if (byteProperty && byteProperty->Enum)
                     {
@@ -428,7 +727,7 @@ namespace Retrievers
             }
             else if (uProperty->IsA<UArrayProperty>())
             {
-                UArrayProperty* arrayProperty = static_cast<UArrayProperty*>(uProperty);
+                UArrayProperty *arrayProperty = static_cast<UArrayProperty *>(uProperty);
 
                 if (arrayProperty && arrayProperty->Inner)
                 {
@@ -442,16 +741,16 @@ namespace Retrievers
                 }
             }
         }
-        
+
         return EPropertyTypes::TYPE_UNKNOWN;
     }
 
-    EPropertyTypes GetPropertyType(class UProperty* uProperty, std::string& outPropertyType, bool bIsBitField)
+    EPropertyTypes GetPropertyType(class UProperty *uProperty, std::string &outPropertyType, bool bIsBitField)
     {
         return GetPropertyTypeInternal(uProperty, outPropertyType, false, bIsBitField);
     }
 
-    size_t GetPropertySize(UProperty* uProperty, bool bIsBitField)
+    size_t GetPropertySize(UProperty *uProperty, bool bIsBitField)
     {
         if (uProperty)
         {
@@ -517,7 +816,7 @@ namespace Retrievers
                 return sizeof(TArray<uintptr_t>);
             }
         }
-        
+
         return 0;
     }
 
@@ -530,7 +829,7 @@ namespace Retrievers
 #endif
     }
 
-    uintptr_t GetOffset(void* pointer)
+    uintptr_t GetOffset(void *pointer)
     {
         uintptr_t entryPoint = GetEntryPoint();
         uintptr_t address = reinterpret_cast<uintptr_t>(pointer);
@@ -539,13 +838,13 @@ namespace Retrievers
         {
             return (address - entryPoint);
         }
-        
+
         return 0;
     }
 
 #ifndef _WIN32
     // Linux: get the base address of the main executable or a loaded shared object
-    HMODULE GetModuleHandle(const char* name)
+    HMODULE GetModuleHandle(const char *name)
     {
         if (!name)
         {
@@ -589,7 +888,7 @@ namespace Retrievers
     }
 #endif
 
-    uintptr_t FindPattern(HMODULE hModule, const uint8_t* pattern, const char* mask)
+    uintptr_t FindPattern(HMODULE hModule, const uint8_t *pattern, const char *mask)
     {
         uintptr_t start = 0;
         uintptr_t end = 0;
@@ -610,7 +909,7 @@ namespace Retrievers
 
         for (uintptr_t retAddress = start; retAddress < end; retAddress++)
         {
-            if (*reinterpret_cast<uint8_t*>(retAddress) == pattern[currentPos] || mask[currentPos] == '?')
+            if (*reinterpret_cast<uint8_t *>(retAddress) == pattern[currentPos] || mask[currentPos] == '?')
             {
                 if (currentPos == maskLength)
                 {
@@ -632,7 +931,7 @@ namespace Retrievers
 
 namespace ConstGenerator
 {
-    void GenerateConst(std::ofstream& file, class UConst* constant)
+    void GenerateConst(std::ofstream &file, class UConst *constant)
     {
         std::ostringstream constStream;
         std::ostringstream valueStream;
@@ -672,21 +971,21 @@ namespace ConstGenerator
                 file << "#define CONST_" << constName << Printer::Decimal(mapSize, EWidthTypes::BYTE);
                 Printer::FillLeft(file, ' ', (Configuration::ConstSpacer - constName.length()));
                 file << " " << constValue << "\n";
-            }   
+            }
         }
     }
 
-    void ProcessConsts(std::ofstream& file, class UObject* packageObj)
+    void ProcessConsts(std::ofstream &file, class UObject *packageObj)
     {
-        for (UObject* uObject : *UObject::GObjObjects())
+        for (UObject *uObject : *UObject::GObjObjects())
         {
             if (uObject && uObject->IsA<UConst>())
             {
-                UObject* packageObject = uObject->GetPackageObj();
+                UObject *packageObject = uObject->GetPackageObj();
 
                 if (packageObject && (packageObject == packageObj))
                 {
-                    GenerateConst(file, static_cast<UConst*>(uObject));
+                    GenerateConst(file, static_cast<UConst *>(uObject));
                 }
             }
         }
@@ -695,23 +994,23 @@ namespace ConstGenerator
 
 namespace EnumGenerator
 {
-    std::unordered_map<std::string, std::vector<class UEnum*>> mEnumCache{};
-    std::unordered_map<UEnum*, std::string> mGeneratedNames{};
+    std::unordered_map<std::string, std::vector<class UEnum *>> mEnumCache{};
+    std::unordered_map<UEnum *, std::string> mGeneratedNames{};
 
-    std::string GenerateEnumName(class UEnum* uEnum)
+    std::string GenerateEnumName(class UEnum *uEnum)
     {
         if (mEnumCache.empty())
         {
-            for (UObject* uObject : *UObject::GObjObjects())
+            for (UObject *uObject : *UObject::GObjObjects())
             {
                 if (uObject && uObject->IsA<UEnum>())
                 {
-                    UEnum* newEnum = static_cast<UEnum*>(uObject);
+                    UEnum *newEnum = static_cast<UEnum *>(uObject);
                     std::string enumName = Utils::CreateValidName(newEnum->GetName());
 
                     if (mEnumCache.find(enumName) == mEnumCache.end())
                     {
-                        mEnumCache[enumName] = { newEnum };
+                        mEnumCache[enumName] = {newEnum};
                     }
                     else
                     {
@@ -733,7 +1032,7 @@ namespace EnumGenerator
                     {
                         uint32_t index = 0;
 
-                        for (UEnum* cachedEnum : mEnumCache[enumName])
+                        for (UEnum *cachedEnum : mEnumCache[enumName])
                         {
                             if (cachedEnum)
                             {
@@ -766,7 +1065,7 @@ namespace EnumGenerator
         return "UnknownName";
     }
 
-    void GenerateEnum(std::ofstream& file, class UEnum* uEnum)
+    void GenerateEnum(std::ofstream &file, class UEnum *uEnum)
     {
         std::ostringstream enumStream;
         std::ostringstream propertyStream;
@@ -856,17 +1155,17 @@ namespace EnumGenerator
         }
     }
 
-    void ProcessEnums(std::ofstream& file, class UObject* packageObj)
+    void ProcessEnums(std::ofstream &file, class UObject *packageObj)
     {
-        for (UObject* uObject : *UObject::GObjObjects())
+        for (UObject *uObject : *UObject::GObjObjects())
         {
             if (uObject && uObject->IsA<UEnum>())
             {
-                UObject* packageObject = uObject->GetPackageObj();
+                UObject *packageObject = uObject->GetPackageObj();
 
                 if (packageObject && (packageObject == packageObj))
                 {
-                    GenerateEnum(file, static_cast<UEnum*>(uObject));
+                    GenerateEnum(file, static_cast<UEnum *>(uObject));
                 }
             }
         }
@@ -877,18 +1176,18 @@ namespace StructGenerator
 {
     std::vector<std::string> vGeneratedStructs{};
 
-    class UScriptStruct* FindLargestStruct(const std::string& structFullName)
+    class UScriptStruct *FindLargestStruct(const std::string &structFullName)
     {
         size_t propertySize = 0;
-        UScriptStruct* largestStruct = nullptr;
+        UScriptStruct *largestStruct = nullptr;
 
-        for (UObject* object : *UObject::GObjObjects())
+        for (UObject *object : *UObject::GObjObjects())
         {
             if (object && object->IsA<UScriptStruct>())
             {
                 if (object->GetFullName() == structFullName)
                 {
-                    UScriptStruct* scriptStruct = static_cast<UScriptStruct*>(object);
+                    UScriptStruct *scriptStruct = static_cast<UScriptStruct *>(object);
 
                     if (scriptStruct->PropertySize >= propertySize)
                     {
@@ -902,7 +1201,7 @@ namespace StructGenerator
         return largestStruct;
     }
 
-    void GenerateStructFields(std::ofstream& structStream, EClassTypes structType)
+    void GenerateStructFields(std::ofstream &structStream, EClassTypes structType)
     {
         std::ostringstream propertyStream;
 
@@ -920,7 +1219,7 @@ namespace StructGenerator
             lastOffset = startOffset;
             int32_t unknownDataIndex = 0;
 
-            for (const auto& member : members)
+            for (const auto &member : members)
             {
                 if ((lastOffset + member.second.Size) < member.second.Offset)
                 {
@@ -967,7 +1266,7 @@ namespace StructGenerator
         }
     }
 
-    void GenerateStruct(std::ofstream& file, class UScriptStruct* scriptStruct)
+    void GenerateStruct(std::ofstream &file, class UScriptStruct *scriptStruct)
     {
         std::ostringstream structStream;
         std::ostringstream propertyStream;
@@ -1000,7 +1299,7 @@ namespace StructGenerator
         size_t lastOffset = 0;
         size_t missedOffset = 0;
 
-        UScriptStruct* superField = static_cast<UScriptStruct*>(scriptStruct->SuperField);
+        UScriptStruct *superField = static_cast<UScriptStruct *>(scriptStruct->SuperField);
         uint32_t structCount = UObject::CountObject<UScriptStruct>(structName);
 
         if (superField && superField != scriptStruct)
@@ -1053,9 +1352,9 @@ namespace StructGenerator
         }
 
         structStream << "{\n";
-        std::vector<UProperty*> structProperties;
+        std::vector<UProperty *> structProperties;
 
-        for (UProperty* uProperty = static_cast<UProperty*>(scriptStruct->Children); uProperty; uProperty = static_cast<UProperty*>(uProperty->Next))
+        for (UProperty *uProperty = static_cast<UProperty *>(scriptStruct->Children); uProperty; uProperty = static_cast<UProperty *>(uProperty->Next))
         {
             if ((uProperty->ElementSize > 0) && !uProperty->IsA<UScriptStruct>())
             {
@@ -1067,7 +1366,7 @@ namespace StructGenerator
         std::map<std::string, uint32_t> propertyNameMap;
         uint32_t unknownDataIndex = 0;
 
-        for (UProperty* uProperty : structProperties)
+        for (UProperty *uProperty : structProperties)
         {
             if (uProperty)
             {
@@ -1188,7 +1487,7 @@ namespace StructGenerator
 
                         if (uProperty->IsA<UBoolProperty>())
                         {
-                            structStream << "[" << Printer::Hex(static_cast<UBoolProperty*>(uProperty)->BitMask, EWidthTypes::BITMASK) << "] ";
+                            structStream << "[" << Printer::Hex(static_cast<UBoolProperty *>(uProperty)->BitMask, EWidthTypes::BITMASK) << "] ";
                         }
                         else
                         {
@@ -1211,7 +1510,7 @@ namespace StructGenerator
                         Printer::Empty(propertyStream);
 
                         structStream << " (" << Printer::Hex(offsetError, EWidthTypes::SIZE) << ") FIX WRONG SIZE OF PREVIOUS PROPERTY";
-                        structStream << " [Original: " << Printer::Hex((uProperty->ElementSize * uProperty->ArrayDim),EWidthTypes::SIZE);
+                        structStream << " [Original: " << Printer::Hex((uProperty->ElementSize * uProperty->ArrayDim), EWidthTypes::SIZE);
                         structStream << ", Missing: " << Printer::Hex(offsetError, EWidthTypes::SIZE) << "]\n";
 
                         unknownDataIndex++;
@@ -1265,9 +1564,9 @@ namespace StructGenerator
         file << structStream.str();
     }
 
-    void GenerateStructProperties(std::ofstream& file, class UScriptStruct* scriptStruct, class UObject* packageObj)
+    void GenerateStructProperties(std::ofstream &file, class UScriptStruct *scriptStruct, class UObject *packageObj)
     {
-        UObject* packageObject = scriptStruct->GetPackageObj();
+        UObject *packageObject = scriptStruct->GetPackageObj();
 
         if (packageObject && packageObject == packageObj)
         {
@@ -1283,19 +1582,19 @@ namespace StructGenerator
             {
                 scriptStruct = FindLargestStruct(structFullName);
 
-                if (scriptStruct->SuperField && scriptStruct->SuperField != scriptStruct && std::find(vGeneratedStructs.begin(), vGeneratedStructs.end(), (static_cast<UScriptStruct*>(scriptStruct->SuperField))->GetFullName()) == vGeneratedStructs.end())
+                if (scriptStruct->SuperField && scriptStruct->SuperField != scriptStruct && std::find(vGeneratedStructs.begin(), vGeneratedStructs.end(), (static_cast<UScriptStruct *>(scriptStruct->SuperField))->GetFullName()) == vGeneratedStructs.end())
                 {
-                    GenerateStructProperties(file, static_cast<UScriptStruct*>(scriptStruct->SuperField), packageObj);
+                    GenerateStructProperties(file, static_cast<UScriptStruct *>(scriptStruct->SuperField), packageObj);
                 }
 
-                for (UProperty* structChild = static_cast<UProperty*>(scriptStruct->Children); structChild; structChild = static_cast<UProperty*>(structChild->Next))
+                for (UProperty *structChild = static_cast<UProperty *>(scriptStruct->Children); structChild; structChild = static_cast<UProperty *>(structChild->Next))
                 {
                     std::string propertyType;
                     EPropertyTypes childType = Retrievers::GetPropertyType(structChild, propertyType);
 
                     if (childType == EPropertyTypes::TYPE_FSTRUCT)
                     {
-                        UScriptStruct* propertyStruct = static_cast<UScriptStruct*>(static_cast<UStructProperty*>(structChild)->Struct);
+                        UScriptStruct *propertyStruct = static_cast<UScriptStruct *>(static_cast<UStructProperty *>(structChild)->Struct);
 
                         if (propertyStruct && propertyStruct != scriptStruct && std::find(vGeneratedStructs.begin(), vGeneratedStructs.end(), propertyStruct->GetFullName()) == vGeneratedStructs.end())
                         {
@@ -1304,11 +1603,9 @@ namespace StructGenerator
                     }
                     else if (childType == EPropertyTypes::TYPE_TARRAY)
                     {
-                        UScriptStruct* propertyStruct = static_cast<UScriptStruct*>(static_cast<UStructProperty*>(static_cast<UArrayProperty*>(structChild)->Inner)->Struct);
+                        UScriptStruct *propertyStruct = static_cast<UScriptStruct *>(static_cast<UStructProperty *>(static_cast<UArrayProperty *>(structChild)->Inner)->Struct);
 
-                        if (propertyStruct != scriptStruct
-                            && Retrievers::GetPropertyType(static_cast<UArrayProperty*>(structChild)->Inner, propertyType) == EPropertyTypes::TYPE_FSTRUCT
-                            && std::find(vGeneratedStructs.begin(), vGeneratedStructs.end(), propertyStruct->GetFullName()) == vGeneratedStructs.end())
+                        if (propertyStruct != scriptStruct && Retrievers::GetPropertyType(static_cast<UArrayProperty *>(structChild)->Inner, propertyType) == EPropertyTypes::TYPE_FSTRUCT && std::find(vGeneratedStructs.begin(), vGeneratedStructs.end(), propertyStruct->GetFullName()) == vGeneratedStructs.end())
                         {
                             GenerateStructProperties(file, propertyStruct, packageObj);
                         }
@@ -1317,21 +1614,21 @@ namespace StructGenerator
 
                 GenerateStruct(file, scriptStruct);
                 vGeneratedStructs.push_back(structFullName);
-            }   
+            }
         }
     }
 
-    void ProcessStructs(std::ofstream& file, class UObject* packageObj)
+    void ProcessStructs(std::ofstream &file, class UObject *packageObj)
     {
-        for (UObject* uObject : *UObject::GObjObjects())
+        for (UObject *uObject : *UObject::GObjObjects())
         {
             if (uObject && uObject->IsA<UScriptStruct>())
             {
-                UObject* packageObject = uObject->GetPackageObj();
+                UObject *packageObject = uObject->GetPackageObj();
 
                 if (packageObject && (packageObject == packageObj))
                 {
-                    GenerateStructProperties(file, static_cast<UScriptStruct*>(uObject), packageObject);
+                    GenerateStructProperties(file, static_cast<UScriptStruct *>(uObject), packageObject);
                 }
             }
         }
@@ -1342,7 +1639,7 @@ namespace ClassGenerator
 {
     extern std::unordered_map<std::string, int32_t> mGeneratedClasses{};
 
-    void GenerateClassFields(std::ostringstream& classStream, class UClass* uClass, EClassTypes classType)
+    void GenerateClassFields(std::ostringstream &classStream, class UClass *uClass, EClassTypes classType)
     {
         std::ostringstream propertyStream;
 
@@ -1362,7 +1659,7 @@ namespace ClassGenerator
                 lastOffset = startOffset;
                 int32_t unknownDataIndex = 0;
 
-                for (const auto& member : members)
+                for (const auto &member : members)
                 {
                     if ((lastOffset + member.second.Size) < member.second.Offset)
                     {
@@ -1423,7 +1720,7 @@ namespace ClassGenerator
         }
     }
 
-    void GenerateClass(std::ofstream& file, class UClass* uClass)
+    void GenerateClass(std::ofstream &file, class UClass *uClass)
     {
         std::ostringstream classStream;
         std::ostringstream propertyStream;
@@ -1433,7 +1730,7 @@ namespace ClassGenerator
         size_t lastOffset = 0;
         size_t missedOffset = 0;
 
-        UClass* uSuperClass = static_cast<UClass*>(uClass->SuperField);
+        UClass *uSuperClass = static_cast<UClass *>(uClass->SuperField);
         std::string className = Utils::CreateValidName(uClass->GetName());
         std::string classNameCPP = Utils::CreateValidName(uClass->GetNameCPP());
         std::string classFullName = uClass->GetFullName();
@@ -1450,16 +1747,11 @@ namespace ClassGenerator
             Generator::LogFile << " - Instance: " << Printer::Hex(uClass) << std::endl;
         }
 #endif
-        std::vector<UProperty*> classProperties;
+        std::vector<UProperty *> classProperties;
 
-        for (UProperty* uProperty = static_cast<UProperty*>(uClass->Children); uProperty; uProperty = static_cast<UProperty*>(uProperty->Next))
+        for (UProperty *uProperty = static_cast<UProperty *>(uClass->Children); uProperty; uProperty = static_cast<UProperty *>(uProperty->Next))
         {
-            if (!uProperty->IsA<UFunction>()
-                && !uProperty->IsA<UConst>()
-                && !uProperty->IsA<UEnum>()
-                && !uProperty->IsA<UScriptStruct>()
-                && (uProperty->ElementSize > 0)
-                && (!uSuperClass || (uSuperClass && uSuperClass != uClass && uProperty->Offset >= uSuperClass->PropertySize)))
+            if (!uProperty->IsA<UFunction>() && !uProperty->IsA<UConst>() && !uProperty->IsA<UEnum>() && !uProperty->IsA<UScriptStruct>() && (uProperty->ElementSize > 0) && (!uSuperClass || (uSuperClass && uSuperClass != uClass && uProperty->Offset >= uSuperClass->PropertySize)))
             {
                 classProperties.push_back(uProperty);
             }
@@ -1476,7 +1768,8 @@ namespace ClassGenerator
             classStream << "// " << Printer::Hex(size, EWidthTypes::SIZE);
             classStream << " (" << Printer::Hex(uSuperClass->PropertySize, EWidthTypes::SIZE);
             classStream << " - " << Printer::Hex(uClass->PropertySize, EWidthTypes::SIZE);
-            classStream << ")\n" << "class " << classNameCPP << " : public " << Utils::CreateValidName(uSuperClass->GetNameCPP());
+            classStream << ")\n"
+                        << "class " << classNameCPP << " : public " << Utils::CreateValidName(uSuperClass->GetNameCPP());
         }
         else
         {
@@ -1488,26 +1781,68 @@ namespace ClassGenerator
 
         classStream << "\n{\npublic:\n";
 
-        if (uClass == UField::StaticClass()) { GenerateClassFields(classStream, uClass, EClassTypes::CLASS_UFIELD); }
-        else if (uClass == UEnum::StaticClass()) { GenerateClassFields(classStream, uClass, EClassTypes::CLASS_UENUM); }
-        else if (uClass == UConst::StaticClass()) { GenerateClassFields(classStream, uClass, EClassTypes::CLASS_UCONST); }
-        else if (uClass == UProperty::StaticClass()) { GenerateClassFields(classStream, uClass, EClassTypes::CLASS_UPROPERTY); }
-        else if (uClass == UStruct::StaticClass()) { GenerateClassFields(classStream, uClass, EClassTypes::CLASS_USTRUCT); }
-        else if (uClass == UFunction::StaticClass()) { GenerateClassFields(classStream, uClass, EClassTypes::CLASS_UFUNCTION); }
-        else if (uClass == UStructProperty::StaticClass()) { GenerateClassFields(classStream, uClass, EClassTypes::CLASS_USTRUCTPROPERTY); }
-        else if (uClass == UObjectProperty::StaticClass()) { GenerateClassFields(classStream, uClass, EClassTypes::CLASS_UOBJECTPROPERTY); }
-        else if (uClass == UMapProperty::StaticClass()) { GenerateClassFields(classStream, uClass, EClassTypes::CLASS_UMAPPROPERTY); }
-        else if (uClass == UInterfaceProperty::StaticClass()) { GenerateClassFields(classStream, uClass, EClassTypes::CLASS_UINTERFACEPROPERTY); }
-        else if (uClass == UDelegateProperty::StaticClass()) { GenerateClassFields(classStream, uClass, EClassTypes::CLASS_UDELEGATEPROPERTY); }
-        else if (uClass == UByteProperty::StaticClass()) { GenerateClassFields(classStream, uClass, EClassTypes::CLASS_UBYTEPROPERTY); }
-        else if (uClass == UBoolProperty::StaticClass()) { GenerateClassFields(classStream, uClass, EClassTypes::CLASS_UBOOLPROPERTY); }
-        else if (uClass == UArrayProperty::StaticClass()) { GenerateClassFields(classStream, uClass, EClassTypes::CLASS_UARRAYPROPERTY); }
+        if (uClass == UField::StaticClass())
+        {
+            GenerateClassFields(classStream, uClass, EClassTypes::CLASS_UFIELD);
+        }
+        else if (uClass == UEnum::StaticClass())
+        {
+            GenerateClassFields(classStream, uClass, EClassTypes::CLASS_UENUM);
+        }
+        else if (uClass == UConst::StaticClass())
+        {
+            GenerateClassFields(classStream, uClass, EClassTypes::CLASS_UCONST);
+        }
+        else if (uClass == UProperty::StaticClass())
+        {
+            GenerateClassFields(classStream, uClass, EClassTypes::CLASS_UPROPERTY);
+        }
+        else if (uClass == UStruct::StaticClass())
+        {
+            GenerateClassFields(classStream, uClass, EClassTypes::CLASS_USTRUCT);
+        }
+        else if (uClass == UFunction::StaticClass())
+        {
+            GenerateClassFields(classStream, uClass, EClassTypes::CLASS_UFUNCTION);
+        }
+        else if (uClass == UStructProperty::StaticClass())
+        {
+            GenerateClassFields(classStream, uClass, EClassTypes::CLASS_USTRUCTPROPERTY);
+        }
+        else if (uClass == UObjectProperty::StaticClass())
+        {
+            GenerateClassFields(classStream, uClass, EClassTypes::CLASS_UOBJECTPROPERTY);
+        }
+        else if (uClass == UMapProperty::StaticClass())
+        {
+            GenerateClassFields(classStream, uClass, EClassTypes::CLASS_UMAPPROPERTY);
+        }
+        else if (uClass == UInterfaceProperty::StaticClass())
+        {
+            GenerateClassFields(classStream, uClass, EClassTypes::CLASS_UINTERFACEPROPERTY);
+        }
+        else if (uClass == UDelegateProperty::StaticClass())
+        {
+            GenerateClassFields(classStream, uClass, EClassTypes::CLASS_UDELEGATEPROPERTY);
+        }
+        else if (uClass == UByteProperty::StaticClass())
+        {
+            GenerateClassFields(classStream, uClass, EClassTypes::CLASS_UBYTEPROPERTY);
+        }
+        else if (uClass == UBoolProperty::StaticClass())
+        {
+            GenerateClassFields(classStream, uClass, EClassTypes::CLASS_UBOOLPROPERTY);
+        }
+        else if (uClass == UArrayProperty::StaticClass())
+        {
+            GenerateClassFields(classStream, uClass, EClassTypes::CLASS_UARRAYPROPERTY);
+        }
         else
         {
             std::map<std::string, uint32_t> propertyNameMap;
             uint32_t unknownDataIndex = 0;
 
-            for (UProperty* uProperty : classProperties)
+            for (UProperty *uProperty : classProperties)
             {
                 if (uProperty)
                 {
@@ -1639,7 +1974,7 @@ namespace ClassGenerator
 
                             if (uProperty->IsA<UBoolProperty>())
                             {
-                                classStream << "[" << Printer::Hex(static_cast<UBoolProperty*>(uProperty)->BitMask, EWidthTypes::BITMASK) << "] ";
+                                classStream << "[" << Printer::Hex(static_cast<UBoolProperty *>(uProperty)->BitMask, EWidthTypes::BITMASK) << "] ";
                             }
                             else
                             {
@@ -1722,7 +2057,8 @@ namespace ClassGenerator
             classStream << "\t\t\tuClassPointer = reinterpret_cast<UClass*>(UObject::GObjObjects()->At(" << Utils::CreateValidName(Generator::GenerateIndex(uClass)) << "));\n";
             classStream << "\t\t}\n\n";
             classStream << "\t\treturn uClassPointer;\n";
-            classStream << "\t};\n\n";;
+            classStream << "\t};\n\n";
+            ;
         }
         else
         {
@@ -1767,9 +2103,9 @@ namespace ClassGenerator
         file << classStream.str();
     }
 
-    void GenerateClassProperties(std::ofstream& file, class UClass* uClass, class UObject* uPackageObj)
+    void GenerateClassProperties(std::ofstream &file, class UClass *uClass, class UObject *uPackageObj)
     {
-        UObject* packageObject = uClass->GetPackageObj();
+        UObject *packageObject = uClass->GetPackageObj();
 
         if (packageObject)
         {
@@ -1780,8 +2116,8 @@ namespace ClassGenerator
 
             if (packageObject != uPackageObj)
             {
-                const auto& itPO = std::find(Generator::vIncludes.begin(), Generator::vIncludes.end(), packageObject);
-                const auto& itPTP = std::find(Generator::vIncludes.begin(), Generator::vIncludes.end(), uPackageObj);
+                const auto &itPO = std::find(Generator::vIncludes.begin(), Generator::vIncludes.end(), packageObject);
+                const auto &itPTP = std::find(Generator::vIncludes.begin(), Generator::vIncludes.end(), uPackageObj);
 
                 if (itPO == Generator::vIncludes.end())
                 {
@@ -1807,28 +2143,28 @@ namespace ClassGenerator
                     {
                         if (mGeneratedClasses.find(uClass->SuperField->GetFullName()) == mGeneratedClasses.end())
                         {
-                            GenerateClassProperties(file, static_cast<UClass*>(uClass->SuperField), uPackageObj);
+                            GenerateClassProperties(file, static_cast<UClass *>(uClass->SuperField), uPackageObj);
                         }
                     }
 
                     GenerateClass(file, uClass);
                     mGeneratedClasses.emplace(classFullName, uClass->ObjectInternalInteger);
-                }   
+                }
             }
         }
     }
 
-    void ProcessClasses(std::ofstream& file, class UObject* uPackageObj)
+    void ProcessClasses(std::ofstream &file, class UObject *uPackageObj)
     {
-        for (UObject* uObject : *UObject::GObjObjects())
+        for (UObject *uObject : *UObject::GObjObjects())
         {
             if (uObject && uObject->IsA<UClass>())
             {
-                UObject* packageObject = uObject->GetPackageObj();
+                UObject *packageObject = uObject->GetPackageObj();
 
                 if (packageObject && (packageObject == uPackageObj))
                 {
-                    GenerateClassProperties(file, static_cast<UClass*>(uObject), packageObject);
+                    GenerateClassProperties(file, static_cast<UClass *>(uObject), packageObject);
                 }
             }
         }
@@ -1837,23 +2173,23 @@ namespace ClassGenerator
 
 namespace ParameterGenerator
 {
-    void GenerateParameter(std::ofstream& file, class UClass* uClass)
+    void GenerateParameter(std::ofstream &file, class UClass *uClass)
     {
         std::ostringstream parameterStream;
         std::ostringstream propertyStream;
         std::ostringstream flagStream;
 
-        std::vector<UFunction*> vFunction;
+        std::vector<UFunction *> vFunction;
 
-        for (UProperty* uProperty = static_cast<UProperty*>(uClass->Children); uProperty; uProperty = static_cast<UProperty*>(uProperty->Next))
+        for (UProperty *uProperty = static_cast<UProperty *>(uClass->Children); uProperty; uProperty = static_cast<UProperty *>(uProperty->Next))
         {
             if (uProperty->IsA<UFunction>())
             {
-                vFunction.push_back(reinterpret_cast<UFunction*>(uProperty));
+                vFunction.push_back(reinterpret_cast<UFunction *>(uProperty));
             }
         }
 
-        for (UFunction* uFunction : vFunction)
+        for (UFunction *uFunction : vFunction)
         {
             if (uFunction)
             {
@@ -1869,20 +2205,30 @@ namespace ParameterGenerator
                     parameterStream << " (iNative[" << std::to_string(uFunction->iNative) << "])";
                 }
 
-                if (uFunction->FunctionFlags & EFunctionFlags::FUNC_Exec) { propertyStream << "exec"; }
-                else if (uFunction->FunctionFlags & EFunctionFlags::FUNC_Event) { propertyStream << "event"; }
-                else { propertyStream << "exec"; }
+                if (uFunction->FunctionFlags & EFunctionFlags::FUNC_Exec)
+                {
+                    propertyStream << "exec";
+                }
+                else if (uFunction->FunctionFlags & EFunctionFlags::FUNC_Event)
+                {
+                    propertyStream << "event";
+                }
+                else
+                {
+                    propertyStream << "exec";
+                }
 
                 if (Configuration::UsingWindows)
                 {
                     Utils::CreateWinFunction(functionName);
                 }
 
-                parameterStream << "\nstruct " << classNameCPP << "_" << propertyStream.str() << functionName << "_Params\n" << "{\n";
+                parameterStream << "\nstruct " << classNameCPP << "_" << propertyStream.str() << functionName << "_Params\n"
+                                << "{\n";
                 Printer::Empty(propertyStream);
-                std::vector<UProperty*> vProperty;
+                std::vector<UProperty *> vProperty;
 
-                for (UProperty* uProperty = static_cast<UProperty*>(uFunction->Children); uProperty; uProperty = static_cast<UProperty*>(uProperty->Next))
+                for (UProperty *uProperty = static_cast<UProperty *>(uFunction->Children); uProperty; uProperty = static_cast<UProperty *>(uProperty->Next))
                 {
                     if (uProperty->ElementSize > 0)
                     {
@@ -1893,7 +2239,7 @@ namespace ParameterGenerator
                 std::sort(vProperty.begin(), vProperty.end(), Utils::SortProperty);
                 std::map<std::string, uint32_t> propertyNameMap;
 
-                for (UProperty* uProperty : vProperty)
+                for (UProperty *uProperty : vProperty)
                 {
                     if (uProperty)
                     {
@@ -1960,7 +2306,7 @@ namespace ParameterGenerator
 
                             if (uProperty->IsA<UBoolProperty>())
                             {
-                                parameterStream << "[" << Printer::Hex(static_cast<UBoolProperty*>(uProperty)->BitMask, EWidthTypes::BITMASK) << "] ";
+                                parameterStream << "[" << Printer::Hex(static_cast<UBoolProperty *>(uProperty)->BitMask, EWidthTypes::BITMASK) << "] ";
                             }
                             else
                             {
@@ -1986,17 +2332,17 @@ namespace ParameterGenerator
         file << parameterStream.str();
     }
 
-    void ProcessParameters(std::ofstream& file, UObject* packageObj)
+    void ProcessParameters(std::ofstream &file, UObject *packageObj)
     {
-        for (UObject* uObject : *UObject::GObjObjects())
+        for (UObject *uObject : *UObject::GObjObjects())
         {
             if (uObject && uObject->IsA<UClass>())
             {
-                UObject* packageObject = uObject->GetPackageObj();
+                UObject *packageObject = uObject->GetPackageObj();
 
                 if (packageObject && (packageObject == packageObj))
                 {
-                    GenerateParameter(file, static_cast<UClass*>(uObject));
+                    GenerateParameter(file, static_cast<UClass *>(uObject));
                 }
             }
         }
@@ -2005,10 +2351,10 @@ namespace ParameterGenerator
 
 namespace FunctionGenerator
 {
-    void GenerateVirtualFunctions(std::ofstream& file)
+    void GenerateVirtualFunctions(std::ofstream &file)
     {
         uintptr_t processEventAddress = 0;
-        
+
         if (!Configuration::UsingOffsets)
         {
 #ifdef _WIN32
@@ -2019,7 +2365,7 @@ namespace FunctionGenerator
         }
         else if (Configuration::ProcessEventIndex != -1)
         {
-            processEventAddress = reinterpret_cast<uintptr_t*>(UObject::StaticClass()->VfTableObject.Dummy)[Configuration::ProcessEventIndex];
+            processEventAddress = reinterpret_cast<uintptr_t *>(UObject::StaticClass()->VfTableObject.Dummy)[Configuration::ProcessEventIndex];
         }
         else
         {
@@ -2034,7 +2380,7 @@ namespace FunctionGenerator
 
             for (int32_t index = 0; index < 512; index++)
             {
-                uintptr_t virtualFunction = reinterpret_cast<uintptr_t*>(UObject::StaticClass()->VfTableObject.Dummy)[index];
+                uintptr_t virtualFunction = reinterpret_cast<uintptr_t *>(UObject::StaticClass()->VfTableObject.Dummy)[index];
 
                 if (virtualFunction == processEventAddress)
                 {
@@ -2056,11 +2402,11 @@ namespace FunctionGenerator
         }
     }
 
-    void GenerateFunctionCode(std::ofstream& file, class UClass* uClass)
+    void GenerateFunctionCode(std::ofstream &file, class UClass *uClass)
     {
         std::ostringstream codeStream;
         std::ostringstream functionStream;
-        std::vector<UFunction*> classFunctions;
+        std::vector<UFunction *> classFunctions;
 
         static bool objectFunctions = false;
         static bool functionFunctions = false;
@@ -2092,15 +2438,15 @@ namespace FunctionGenerator
             functionFunctions = true;
         }
 
-        for (UField* uField = uClass->Children; uField; uField = uField->Next)
+        for (UField *uField = uClass->Children; uField; uField = uField->Next)
         {
             if (uField->IsA<UFunction>())
             {
-                classFunctions.push_back(static_cast<UFunction*>(uField));
+                classFunctions.push_back(static_cast<UFunction *>(uField));
             }
         }
 
-        for (UFunction* uFunction : classFunctions)
+        for (UFunction *uFunction : classFunctions)
         {
             if (uFunction)
             {
@@ -2118,13 +2464,13 @@ namespace FunctionGenerator
                     codeStream << " (iNative[" << std::to_string(uFunction->iNative) << "])";
                 }
 
-                std::vector<std::pair<UProperty*, std::string>> propertyParams;
-                std::vector<std::pair<UProperty*, std::string>> propertyOutParams;
-                std::vector<std::pair<UProperty*, std::string>> propertyBothParams;
-                std::pair<UProperty*, std::string> propertyReturnParm;
+                std::vector<std::pair<UProperty *, std::string>> propertyParams;
+                std::vector<std::pair<UProperty *, std::string>> propertyOutParams;
+                std::vector<std::pair<UProperty *, std::string>> propertyBothParams;
+                std::pair<UProperty *, std::string> propertyReturnParm;
                 std::map<std::string, uint32_t> propertyNameMap;
 
-                for (UProperty* uProperty = static_cast<UProperty*>(uFunction->Children); uProperty; uProperty = static_cast<UProperty*>(uProperty->Next))
+                for (UProperty *uProperty = static_cast<UProperty *>(uFunction->Children); uProperty; uProperty = static_cast<UProperty *>(uProperty->Next))
                 {
                     if (uProperty->ElementSize > 0)
                     {
@@ -2179,7 +2525,7 @@ namespace FunctionGenerator
                     Printer::Empty(functionStream);
                 }
 
-                for (const auto& propertyPair : propertyParams)
+                for (const auto &propertyPair : propertyParams)
                 {
                     if (Retrievers::GetPropertyType(propertyPair.first, propertyType) != EPropertyTypes::TYPE_UNKNOWN)
                     {
@@ -2193,7 +2539,7 @@ namespace FunctionGenerator
                     }
                 }
 
-                for (const auto& propertyPair : propertyOutParams)
+                for (const auto &propertyPair : propertyOutParams)
                 {
                     if (Retrievers::GetPropertyType(propertyPair.first, propertyType) != EPropertyTypes::TYPE_UNKNOWN)
                     {
@@ -2209,7 +2555,8 @@ namespace FunctionGenerator
 
                 if (propertyReturnParm.first && Retrievers::GetPropertyType(propertyReturnParm.first, propertyType) != EPropertyTypes::TYPE_UNKNOWN)
                 {
-                    codeStream << "\n" << propertyType;
+                    codeStream << "\n"
+                               << propertyType;
                 }
                 else
                 {
@@ -2221,13 +2568,22 @@ namespace FunctionGenerator
                     Utils::CreateWinFunction(functionName);
                 }
 
-                if (uFunction->FunctionFlags & EFunctionFlags::FUNC_Exec) { codeStream << " " << classNameCPP << "::" << functionName << "("; }
-                else if (uFunction->FunctionFlags & EFunctionFlags::FUNC_Event) { codeStream << " " << classNameCPP << "::event" << functionName << "("; }
-                else { codeStream << " " << classNameCPP << "::" << functionName << "("; }
+                if (uFunction->FunctionFlags & EFunctionFlags::FUNC_Exec)
+                {
+                    codeStream << " " << classNameCPP << "::" << functionName << "(";
+                }
+                else if (uFunction->FunctionFlags & EFunctionFlags::FUNC_Event)
+                {
+                    codeStream << " " << classNameCPP << "::event" << functionName << "(";
+                }
+                else
+                {
+                    codeStream << " " << classNameCPP << "::" << functionName << "(";
+                }
 
                 bool printComma = false;
 
-                for (const auto& propertyPair : propertyParams)
+                for (const auto &propertyPair : propertyParams)
                 {
                     if (Retrievers::GetPropertyType(propertyPair.first, propertyType) != EPropertyTypes::TYPE_UNKNOWN)
                     {
@@ -2241,7 +2597,7 @@ namespace FunctionGenerator
                     }
                 }
 
-                for (const auto& propertyPair : propertyOutParams)
+                for (const auto &propertyPair : propertyOutParams)
                 {
                     if (Retrievers::GetPropertyType(propertyPair.first, propertyType) != EPropertyTypes::TYPE_UNKNOWN)
                     {
@@ -2281,15 +2637,24 @@ namespace FunctionGenerator
                     codeStream << "\t" << classNameCPP << "_";
                 }
 
-                if (uFunction->FunctionFlags & EFunctionFlags::FUNC_Exec) { codeStream << "exec"; }
-                else if (uFunction->FunctionFlags & EFunctionFlags::FUNC_Event) { codeStream << "event"; }
-                else { codeStream << "exec"; }
+                if (uFunction->FunctionFlags & EFunctionFlags::FUNC_Exec)
+                {
+                    codeStream << "exec";
+                }
+                else if (uFunction->FunctionFlags & EFunctionFlags::FUNC_Event)
+                {
+                    codeStream << "event";
+                }
+                else
+                {
+                    codeStream << "exec";
+                }
 
                 codeStream << functionName << "_Params " << functionName << "_Params;\n";
                 codeStream << "\tmemset(&" << functionName << "_Params, 0, sizeof(" << functionName << "_Params));\n";
-                //codeStream << "\tZeroMemory(&" << functionName << "_Params, sizeof(" << functionName << "_Params));\n";
+                // codeStream << "\tZeroMemory(&" << functionName << "_Params, sizeof(" << functionName << "_Params));\n";
 
-                for (const auto& propertyPair : propertyParams)
+                for (const auto &propertyPair : propertyParams)
                 {
                     if (propertyPair.first->PropertyFlags & EPropertyFlags::CPF_Parm)
                     {
@@ -2311,7 +2676,7 @@ namespace FunctionGenerator
                     }
                 }
 
-                for (const auto& propertyPair : propertyBothParams)
+                for (const auto &propertyPair : propertyBothParams)
                 {
                     EPropertyTypes propertyTypeResult = Retrievers::GetPropertyType(propertyPair.first, propertyType);
 
@@ -2377,7 +2742,7 @@ namespace FunctionGenerator
                 {
                     codeStream << "\n";
 
-                    for (const auto& propertyPair : propertyOutParams)
+                    for (const auto &propertyPair : propertyOutParams)
                     {
                         if (propertyPair.first->PropertyFlags & EPropertyFlags::CPF_OutParm)
                         {
@@ -2412,32 +2777,32 @@ namespace FunctionGenerator
         file << codeStream.str();
     }
 
-    void GenerateFunctionDescription(std::ofstream& file, class UClass* uClass)
+    void GenerateFunctionDescription(std::ofstream &file, class UClass *uClass)
     {
         std::ostringstream functionStream;
         std::ostringstream propertyStream;
-        std::vector<UFunction*> classFunctions;
+        std::vector<UFunction *> classFunctions;
 
-        for (UField* uField = uClass->Children; uField; uField = uField->Next)
+        for (UField *uField = uClass->Children; uField; uField = uField->Next)
         {
             if (uField->IsA<UFunction>())
             {
-                classFunctions.push_back(static_cast<UFunction*>(uField));
+                classFunctions.push_back(static_cast<UFunction *>(uField));
             }
         }
 
-        for (UFunction* uFunction : classFunctions)
+        for (UFunction *uFunction : classFunctions)
         {
             if (uFunction)
             {
                 std::string functionName = Utils::CreateValidName(uFunction->GetName());
 
-                std::vector<std::pair<UProperty*, std::string>> propertyParams;
-                std::vector<std::pair<UProperty*, std::string>> propertyOutParams;
-                std::pair<UProperty*, std::string> propertyReturnParm;
+                std::vector<std::pair<UProperty *, std::string>> propertyParams;
+                std::vector<std::pair<UProperty *, std::string>> propertyOutParams;
+                std::pair<UProperty *, std::string> propertyReturnParm;
                 std::map<std::string, uint32_t> propertyNameMap;
 
-                for (UProperty* uProperty = static_cast<UProperty*>(uFunction->Children); uProperty; uProperty = static_cast<UProperty*>(uProperty->Next))
+                for (UProperty *uProperty = static_cast<UProperty *>(uFunction->Children); uProperty; uProperty = static_cast<UProperty *>(uProperty->Next))
                 {
                     if (uProperty->ElementSize > 0)
                     {
@@ -2457,8 +2822,14 @@ namespace FunctionGenerator
                             propertyNameMap[propertyNameBuffer]++;
                         }
 
-                        if (uProperty->PropertyFlags & EPropertyFlags::CPF_ReturnParm) { propertyReturnParm = std::make_pair(uProperty, propertyNameUnique); }
-                        else if (uProperty->PropertyFlags & EPropertyFlags::CPF_OutParm) { propertyOutParams.push_back(std::make_pair(uProperty, propertyNameUnique)); }
+                        if (uProperty->PropertyFlags & EPropertyFlags::CPF_ReturnParm)
+                        {
+                            propertyReturnParm = std::make_pair(uProperty, propertyNameUnique);
+                        }
+                        else if (uProperty->PropertyFlags & EPropertyFlags::CPF_OutParm)
+                        {
+                            propertyOutParams.push_back(std::make_pair(uProperty, propertyNameUnique));
+                        }
                         else if (uProperty->PropertyFlags & EPropertyFlags::CPF_Parm)
                         {
                             if (uProperty->PropertyFlags & EPropertyFlags::CPF_OptionalParm)
@@ -2495,13 +2866,22 @@ namespace FunctionGenerator
                     Utils::CreateWinFunction(functionName);
                 }
 
-                if (uFunction->FunctionFlags & EFunctionFlags::FUNC_Exec) { functionStream << " " << functionName << "("; }
-                else if (uFunction->FunctionFlags & EFunctionFlags::FUNC_Event) { functionStream << " event" << functionName << "("; }
-                else { functionStream << " " << functionName << "("; }
+                if (uFunction->FunctionFlags & EFunctionFlags::FUNC_Exec)
+                {
+                    functionStream << " " << functionName << "(";
+                }
+                else if (uFunction->FunctionFlags & EFunctionFlags::FUNC_Event)
+                {
+                    functionStream << " event" << functionName << "(";
+                }
+                else
+                {
+                    functionStream << " " << functionName << "(";
+                }
 
                 bool printComma = false;
 
-                for (const auto& propertyPair : propertyParams)
+                for (const auto &propertyPair : propertyParams)
                 {
                     if (Retrievers::GetPropertyType(propertyPair.first, propertyType) != EPropertyTypes::TYPE_UNKNOWN)
                     {
@@ -2515,7 +2895,7 @@ namespace FunctionGenerator
                     }
                 }
 
-                for (const auto& propertyPair : propertyOutParams)
+                for (const auto &propertyPair : propertyOutParams)
                 {
                     if (Retrievers::GetPropertyType(propertyPair.first, propertyType) != EPropertyTypes::TYPE_UNKNOWN)
                     {
@@ -2539,17 +2919,17 @@ namespace FunctionGenerator
         file << functionStream.str();
     }
 
-    void ProcessFunctions(std::ofstream& file, class UObject* packageObj)
+    void ProcessFunctions(std::ofstream &file, class UObject *packageObj)
     {
-        for (UObject* uObject : *UObject::GObjObjects())
+        for (UObject *uObject : *UObject::GObjObjects())
         {
             if (uObject && uObject->IsA<UClass>())
             {
-                UObject* packageObject = uObject->GetPackageObj();
+                UObject *packageObject = uObject->GetPackageObj();
 
                 if (packageObject && (packageObject == packageObj))
                 {
-                    GenerateFunctionCode(file, static_cast<UClass*>(uObject));
+                    GenerateFunctionCode(file, static_cast<UClass *>(uObject));
                 }
             }
         }
@@ -2560,16 +2940,16 @@ namespace Generator
 {
     bool GlobalsInitialized = false;
     std::ofstream LogFile;
-    std::vector<class UObject*> vPackages{};
-    std::vector<class UObject*> vIncludes{};
+    std::vector<class UObject *> vPackages{};
+    std::vector<class UObject *> vIncludes{};
     std::vector<std::pair<std::string, int32_t>> vConstants{};
 
-    std::string GenerateIndex(class UObject* uObject, bool bPushBack)
+    std::string GenerateIndex(class UObject *uObject, bool bPushBack)
     {
         std::string objectFullName = Utils::CreateValidName(uObject->GetFullName());
         std::transform(objectFullName.begin(), objectFullName.end(), objectFullName.begin(), toupper);
 
-        for (char& c : objectFullName)
+        for (char &c : objectFullName)
         {
             if (c == '.')
             {
@@ -2599,7 +2979,7 @@ namespace Generator
             std::ofstream constantsFile(Configuration::Directory / Configuration::GameNameShort / "SdkConstants.hpp");
             constantsFile << "#pragma once\n";
 
-            for (UObject* object : *UObject::GObjObjects())
+            for (UObject *object : *UObject::GObjObjects())
             {
                 if (object)
                 {
@@ -2616,7 +2996,7 @@ namespace Generator
                 }
             }
 
-            for (const auto& constant : vConstants)
+            for (const auto &constant : vConstants)
             {
                 constantsFile << "#define " << constant.first;
                 Printer::FillRight(constantsFile, ' ', (175 - constant.first.size()));
@@ -2635,7 +3015,7 @@ namespace Generator
         headersFile << "#pragma once\n";
         Printer::Section(headersFile, "Includes");
 
-        for (auto& package : vIncludes)
+        for (auto &package : vIncludes)
         {
             if (package)
             {
@@ -2737,7 +3117,7 @@ namespace Generator
         definesFile.open(Configuration::Directory / Configuration::GameNameShort / "GameDefines.cpp");
         Printer::Header(definesFile, "GameDefines", "cpp", false);
         definesFile << "#include \"GameDefines.hpp\"\n";
-       
+
         Printer::Section(definesFile, "Initialize Global Variables");
         definesFile << "TArray<class UObject*>* GObjects{};\n";
         definesFile << "TArray<struct FNameEntry*>* GNames{};\n\n";
@@ -2746,15 +3126,15 @@ namespace Generator
         definesFile.close();
     }
 
-    void ProcessPackages(const std::filesystem::path& directory)
+    void ProcessPackages(const std::filesystem::path &directory)
     {
         if (std::filesystem::exists(directory))
         {
-            for (UObject* uObject : *UObject::GObjObjects())
+            for (UObject *uObject : *UObject::GObjObjects())
             {
                 if (uObject && uObject->IsA<UClass>())
                 {
-                    UObject* packageObject = uObject->GetPackageObj();
+                    UObject *packageObject = uObject->GetPackageObj();
 
                     if (packageObject)
                     {
@@ -2763,7 +3143,8 @@ namespace Generator
                             vPackages.push_back(packageObject);
                             std::string packageName = Utils::CreateValidName(packageObject->GetName());
 #ifndef NO_LOGGING
-                            LogFile << "\nProcessing Package: " << packageName << "\n" << std::endl;
+                            LogFile << "\nProcessing Package: " << packageName << "\n"
+                                    << std::endl;
 #endif
                             std::ofstream file;
 
@@ -2840,7 +3221,8 @@ namespace Generator
 #ifndef NO_LOGGING
                 if (LogFile.is_open())
                 {
-                    LogFile << "\n" << Configuration::GameNameShort << " generated in " << formattedTime << " seconds.";
+                    LogFile << "\n"
+                            << Configuration::GameNameShort << " generated in " << formattedTime << " seconds.";
                     LogFile.close();
                 }
 #endif
@@ -2861,8 +3243,8 @@ namespace Generator
             {
                 uintptr_t GObjectsAddress = (Retrievers::GetEntryPoint() + Configuration::GObjectsOffset);
                 uintptr_t GNamesAddress = (Retrievers::GetEntryPoint() + Configuration::GNamesOffset);
-                GObjects = reinterpret_cast<TArray<UObject*>*>(GObjectsAddress);
-                GNames = reinterpret_cast<TArray<FNameEntry*>*>(GNamesAddress);
+                GObjects = reinterpret_cast<TArray<UObject *> *>(GObjectsAddress);
+                GNames = reinterpret_cast<TArray<FNameEntry *> *>(GNamesAddress);
             }
             else
             {
@@ -2873,8 +3255,8 @@ namespace Generator
                 uintptr_t GObjectsAddress = Retrievers::FindPattern(Retrievers::GetModuleHandle(nullptr), Configuration::GObjectsPattern, Configuration::GObjectsMask);
                 uintptr_t GNamesAddress = Retrievers::FindPattern(Retrievers::GetModuleHandle(nullptr), Configuration::GNamesPattern, Configuration::GNamesMask);
 #endif
-                GObjects = reinterpret_cast<TArray<UObject*>*>(GObjectsAddress);
-                GNames = reinterpret_cast<TArray<FNameEntry*>*>(GNamesAddress);
+                GObjects = reinterpret_cast<TArray<UObject *> *>(GObjectsAddress);
+                GNames = reinterpret_cast<TArray<FNameEntry *> *>(GNamesAddress);
             }
 
             if (AreGlobalsValid())
@@ -2891,7 +3273,7 @@ namespace Generator
                 UObject::Register_Name();
                 UObject::Register_Class();
                 UField::Register_Next();
-                //UField::Register_SuperField(); // Safe to comment out if "UStruct" has a "SuperField".
+                // UField::Register_SuperField(); // Safe to comment out if "UStruct" has a "SuperField".
                 UEnum::Register_Names();
                 UConst::Register_Value();
                 UProperty::Register_ArrayDim();
@@ -2909,7 +3291,7 @@ namespace Generator
                 UMapProperty::Register_Key();
                 UMapProperty::Register_Value();
                 UInterfaceProperty::Register_InterfaceClass();
-                UDelegateProperty::Register_Function(); // Not actually needed in sdk generation at the moment (safe to comment out).
+                UDelegateProperty::Register_Function();     // Not actually needed in sdk generation at the moment (safe to comment out).
                 UDelegateProperty::Register_DelegateName(); // Not actually needed in sdk generation at the moment (safe to comment out).
                 UByteProperty::Register_Enum();
                 UBoolProperty::Register_BitMask();
@@ -2993,9 +3375,10 @@ namespace Generator
 
                 file << "Entry Point: " << Printer::Hex(Retrievers::GetEntryPoint(), sizeof(uintptr_t)) << std::endl;
                 file << "GNames: " << Printer::Hex(GNames) << std::endl;
-                file << "Offset: " << Printer::Hex(Retrievers::GetOffset(GNames), sizeof(uintptr_t)) << "\n" << std::endl;
+                file << "Offset: " << Printer::Hex(Retrievers::GetOffset(GNames), sizeof(uintptr_t)) << "\n"
+                     << std::endl;
 
-                for (FNameEntry* nameEntry : *FName::Names())
+                for (FNameEntry *nameEntry : *FName::Names())
                 {
                     if (nameEntry)
                     {
@@ -3028,9 +3411,10 @@ namespace Generator
 
                 file << "Entry Point: " << Printer::Hex(Retrievers::GetEntryPoint(), sizeof(uintptr_t)) << std::endl;
                 file << "GObjects: " << Printer::Hex(GObjects) << std::endl;
-                file << "Offset: " << Printer::Hex(Retrievers::GetOffset(GObjects), sizeof(uintptr_t)) << "\n" << std::endl;
+                file << "Offset: " << Printer::Hex(Retrievers::GetOffset(GObjects), sizeof(uintptr_t)) << "\n"
+                     << std::endl;
 
-                for (UObject* uObject : *UObject::GObjObjects())
+                for (UObject *uObject : *UObject::GObjObjects())
                 {
                     if (uObject)
                     {
@@ -3051,9 +3435,7 @@ namespace Generator
 
     bool AreObjectsValid()
     {
-        if (GObjects
-            && !UObject::GObjObjects()->empty()
-            && UObject::GObjObjects()->capacity() > UObject::GObjObjects()->size())
+        if (GObjects && !UObject::GObjObjects()->empty() && UObject::GObjObjects()->capacity() > UObject::GObjObjects()->size())
         {
             return true;
         }
@@ -3063,9 +3445,7 @@ namespace Generator
 
     bool AreNamesValid()
     {
-        if (GNames
-            && !FName::Names()->empty()
-            && FName::Names()->capacity() > FName::Names()->size())
+        if (GNames && !FName::Names()->empty() && FName::Names()->capacity() > FName::Names()->size())
         {
             return true;
         }
@@ -3103,17 +3483,17 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 }
 #else
 // Linux: constructor attribute runs when the shared library is loaded
-__attribute__((constructor))
-static void OnLoad()
+__attribute__((constructor)) static void OnLoad()
 {
-    std::thread([]() {
+    std::thread([]()
+                {
         Generator::GenerateSDK();
-        Generator::DumpInstances(true, true);
-    }).detach();
+        Generator::DumpInstances(true, true); })
+        .detach();
 }
 
 // Linux: can also be used as a standalone executable
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     Generator::GenerateSDK();
     Generator::DumpInstances(true, true);

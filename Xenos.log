@@ -1,0 +1,15 @@
+2026-03-12 17:22:25 *NORMAL*     Started on Windows 10.0.0.19043 x64. Driver status: 0xC0000225
+2026-03-12 17:22:32 *CRITICAL*   Injection initiated. Mode: 0, process type: 0, pid: 200, mmap flags: 0x0, erasePE: 0, unlink: 0, thread hijack: 0, init routine: '', init arg: ''
+2026-03-12 17:22:55 *NORMAL*     Started on Windows 10.0.0.19043 x64. Driver status: 0xC0000225
+2026-03-12 17:23:01 *CRITICAL*   Injection initiated. Mode: 0, process type: 0, pid: 200, mmap flags: 0x0, erasePE: 0, unlink: 0, thread hijack: 0, init routine: '', init arg: ''
+2026-03-12 17:23:01 *CRITICAL*   Injecting image 'Z:\home\saumondeluxe\Desktop\dev\RL\RLSDK-Generator\CodeRedGenerator.dll'
+2026-03-12 17:23:08 *ERROR*      Failed to inject image using default injection, status: 0xC000010A
+2026-03-12 17:23:08 *ERROR*      Failed to inject image 'Z:\home\saumondeluxe\Desktop\dev\RL\RLSDK-Generator\CodeRedGenerator.dll'.
+Error code 0xC000010A
+2026-03-12 17:24:02 *NORMAL*     Started on Windows 10.0.0.19043 x64. Driver status: 0xC0000225
+2026-03-12 17:24:29 *CRITICAL*   Injection initiated. Mode: 0, process type: 0, pid: 200, mmap flags: 0x0, erasePE: 0, unlink: 0, thread hijack: 0, init routine: '', init arg: ''
+2026-03-12 17:24:29 *CRITICAL*   Injecting image 'Z:\home\saumondeluxe\Desktop\dev\RL\RLSDK-Generator\CodeRedGenerator.dll'
+2026-03-12 17:24:39 *ERROR*      Failed to inject image using default injection, status: 0xC000010A
+2026-03-12 17:24:39 *ERROR*      Failed to inject image 'Z:\home\saumondeluxe\Desktop\dev\RL\RLSDK-Generator\CodeRedGenerator.dll'.
+Error code 0xC000010A
+

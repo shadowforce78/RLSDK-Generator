@@ -47,7 +47,9 @@ namespace Configuration
     const std::string GameName =                "RocketLeague";
     const std::string GameNameShort =           "RLSDK";
     const std::string GameVersion =             "2.1";
-    const std::filesystem::path Directory =     "/home/saumondeluxe/Desktop/dev/RL/SDK/";
+    // const std::filesystem::path Directory =     "/home/saumondeluxe/Desktop/dev/RL/SDK/";
+    const std::filesystem::path Directory =     "N:/Code/RLRelated/RLSDK-Generator/SDK";
+
 
 /*
 # ========================================================================================= #
